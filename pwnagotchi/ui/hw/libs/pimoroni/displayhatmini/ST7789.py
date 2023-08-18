@@ -93,7 +93,7 @@ class ST7789(object):
     def __init__(self, port, cs, dc, backlight, rst=None, width=320,
                  height=240, rotation=0, invert=True, spi_speed_hz=60 * 1000 * 1000,
                  offset_left=0,
-                 offset_top=0):
+                 offset_top=0, backlight_pwm=True):
         """Create an instance of the display using SPI communication.
 
         Must provide the GPIO pin number for the D/C pin and the SPI driver.
@@ -141,10 +141,16 @@ class ST7789(object):
         # Setup backlight as output (if provided).
         self._backlight = backlight
         if backlight is not None:
-            GPIO.setup(backlight, GPIO.OUT)
-            GPIO.output(backlight, GPIO.LOW)
-            time.sleep(0.1)
-            GPIO.output(backlight, GPIO.HIGH)
+            self._backlight_pwm = backlight_pwm
+            if backlight_pwm:
+                GPIO.setup(backlight, GPIO.OUT)
+                self.backlight_pwm = GPIO.PWM(self.BACKLIGHT, 500)
+                self.backlight_pwm.start(1)
+            else:
+                GPIO.setup(backlight, GPIO.OUT)
+                GPIO.output(backlight, GPIO.LOW)
+                time.sleep(0.1)
+                GPIO.output(backlight, GPIO.HIGH)
 
         # Setup reset as output (if provided).
         if rst is not None:
@@ -171,7 +177,10 @@ class ST7789(object):
     def set_backlight(self, value):
         """Set the backlight on/off."""
         if self._backlight is not None:
-            GPIO.output(self._backlight, value)
+            if self._backlight_pwm:
+                self.backlight_pwm.ChangeDutyCycle(value * 100)
+            else:
+                GPIO.output(self._backlight, value)
 
     @property
     def width(self):
