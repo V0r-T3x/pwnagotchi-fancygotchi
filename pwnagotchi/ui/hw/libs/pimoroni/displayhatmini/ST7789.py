@@ -25,6 +25,14 @@ import numpy as np
 import spidev
 import RPi.GPIO as GPIO
 
+# Hardware PWM for the backlight LED requires and external library installed
+# with pip3, and a dtoverlay added to /boot/config.txt to enable hardware PWM
+# run the following two commands in the shell:
+#
+# sudo pip3 install rpi-hardware-pwm
+# echo "dtoverlay=pwm-2chan,pin=12,func=4,pin2=13,func2=4" | sudo tee -a /boot/config.txt
+#
+from rpi_hardware_pwm import HardwarePWM
 
 __version__ = '0.0.4'
 
@@ -92,6 +100,7 @@ class ST7789(object):
 
     def __init__(self, port, cs, dc, backlight, rst=None, width=320,
                  height=240, rotation=0, invert=True, spi_speed_hz=60 * 1000 * 1000,
+                 backlight_pwm=True,
                  offset_left=0,
                  offset_top=0):
         """Create an instance of the display using SPI communication.
@@ -103,6 +112,7 @@ class ST7789(object):
         :param port: SPI port number
         :param cs: SPI chip-select number (0 or 1 for BCM
         :param backlight: Pin for controlling backlight
+        :param backlight_pwm: If true use PWM for backlight, if false then full on
         :param rst: Reset pin for ST7789
         :param width: Width of display connected to ST7789
         :param height: Height of display connected to ST7789
@@ -141,10 +151,15 @@ class ST7789(object):
         # Setup backlight as output (if provided).
         self._backlight = backlight
         if backlight is not None:
-            GPIO.setup(backlight, GPIO.OUT)
-            GPIO.output(backlight, GPIO.LOW)
-            time.sleep(0.1)
-            GPIO.output(backlight, GPIO.HIGH)
+            if backlight_pwm:
+                self._backlight_pwm = HardwarePWM(pwm_channel=1, hz=100)
+                self._backlight_pwm.start(50)
+            else:
+                self._backlight_pwm = None
+                GPIO.setup(backlight, GPIO.OUT)
+                GPIO.output(backlight, GPIO.LOW)
+                time.sleep(0.1)
+                GPIO.output(backlight, GPIO.HIGH)
 
         # Setup reset as output (if provided).
         if rst is not None:
@@ -171,7 +186,10 @@ class ST7789(object):
     def set_backlight(self, value):
         """Set the backlight on/off."""
         if self._backlight is not None:
-            GPIO.output(self._backlight, value)
+            if self._backlight_pwm:
+                self._backlight_pwm.change_duty_cycle(value * 100)
+            else:
+                GPIO.output(self._backlight, value)
 
     @property
     def width(self):
