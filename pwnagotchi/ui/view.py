@@ -18,8 +18,8 @@ from pwnagotchi.voice import Voice
 
 import RPi.GPIO as GPIO
 
-WHITE = 0x181010
-BLACK = 0xffcccc
+WHITE = 0xffffff     # WHITE is background
+BLACK = 0x040000     # BLACK is foreground
 ROOT = None
 
 
@@ -41,6 +41,12 @@ class View(object):
         self._layout = impl.layout()
         self._width = self._layout['width']
         self._height = self._layout['height']
+
+        # pull from configuration
+        colormode = '1' if not 'colormode' in self._config['ui'] else self._config['ui']['colormode']
+        if 'foregroundcolor' in self._config['ui']: BLACK = self._config['ui']['foregroundcolor']
+        if 'backgroundcolor' in self._config['ui']: WHITE = self._config['ui']['backgroundcolor']
+
         self._state = State(state={
             'channel': LabeledValue(color=BLACK, label='CH', value='00', position=self._layout['channel'],
                                     label_font=fonts.Bold,
@@ -376,8 +382,11 @@ class View(object):
             changes = state.changes(ignore=self._ignore_changes)
             if force or len(changes):
                 colormode = '1' if not 'colormode' in self._config['ui'] else self._config['ui']['colormode']
-                backgroundcolor = WHITE if not 'backgroundcolor' in self._config['ui'] else self._config['ui']['backgroundcolor']
-                self._canvas = Image.new(colormode, (self._width, self._height), backgroundcolor)
+
+                if 'foregroundcolor' in self._config['ui']: BLACK = self._config['ui']['foregroundcolor']
+                if 'backgroundcolor' in self._config['ui']: WHITE = self._config['ui']['backgroundcolor']
+
+                self._canvas = Image.new(colormode, (self._width, self._height), WHITE)
                 drawer = ImageDraw.Draw(self._canvas)
 
                 plugins.on('ui_update', self)
