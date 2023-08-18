@@ -382,6 +382,7 @@ class View(object):
             changes = state.changes(ignore=self._ignore_changes)
             if force or len(changes):
                 colormode = '1' if not 'colormode' in self._config['ui'] else self._config['ui']['colormode']
+
                 if 'foregroundcolor' in self._config['ui']: BLACK = self._config['ui']['foregroundcolor']
                 if 'backgroundcolor' in self._config['ui']: WHITE = self._config['ui']['backgroundcolor']
 
