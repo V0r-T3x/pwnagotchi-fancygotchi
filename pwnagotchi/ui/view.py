@@ -18,8 +18,8 @@ from pwnagotchi.voice import Voice
 
 import RPi.GPIO as GPIO
 
-WHITE = 0xff
-BLACK = 0x00
+WHITE = 0xffffff     # WHITE is background
+BLACK = 0x040000     # BLACK is foreground
 ROOT = None
 
 
@@ -41,6 +41,12 @@ class View(object):
         self._layout = impl.layout()
         self._width = self._layout['width']
         self._height = self._layout['height']
+
+        # pull from configuration
+        colormode = '1' if not 'colormode' in self._config['ui'] else self._config['ui']['colormode']
+        if 'foregroundcolor' in self._config['ui']: BLACK = self._config['ui']['foregroundcolor']
+        if 'backgroundcolor' in self._config['ui']: WHITE = self._config['ui']['backgroundcolor']
+
         self._state = State(state={
             'channel': LabeledValue(color=BLACK, label='CH', value='00', position=self._layout['channel'],
                                     label_font=fonts.Bold,
@@ -124,7 +130,7 @@ class View(object):
         while True:
             try:
                 name = self._state.get('name')
-                self.set('name', name.rstrip('█').strip() if '█' in name else (name + ' █'))
+                self.set('name', name.rstrip('-').strip() if '-' in name else (name + ' -'))
                 self.update()
             except Exception as e:
                 logging.warning("non fatal error while updating view: %s" % e)
@@ -375,7 +381,11 @@ class View(object):
             state = self._state
             changes = state.changes(ignore=self._ignore_changes)
             if force or len(changes):
-                self._canvas = Image.new('1', (self._width, self._height), WHITE)
+                colormode = '1' if not 'colormode' in self._config['ui'] else self._config['ui']['colormode']
+                if 'foregroundcolor' in self._config['ui']: BLACK = self._config['ui']['foregroundcolor']
+                if 'backgroundcolor' in self._config['ui']: WHITE = self._config['ui']['backgroundcolor']
+
+                self._canvas = Image.new(colormode, (self._width, self._height), WHITE)
                 drawer = ImageDraw.Draw(self._canvas)
 
                 plugins.on('ui_update', self)
