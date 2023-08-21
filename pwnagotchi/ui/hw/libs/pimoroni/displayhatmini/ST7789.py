@@ -150,16 +150,19 @@ class ST7789(object):
 
         # Setup backlight as output (if provided).
         self._backlight = backlight
+        self._brightness = 0
         if backlight is not None:
             if backlight_pwm:
                 self._backlight_pwm = HardwarePWM(pwm_channel=1, hz=100)
-                self._backlight_pwm.start(50)
+                self._brightness = 50
+                self._backlight_pwm.start(self._brightness)
             else:
                 self._backlight_pwm = None
                 GPIO.setup(backlight, GPIO.OUT)
                 GPIO.output(backlight, GPIO.LOW)
                 time.sleep(0.1)
                 GPIO.output(backlight, GPIO.HIGH)
+                self._brightness = 100
 
         # Setup reset as output (if provided).
         if rst is not None:
@@ -184,12 +187,19 @@ class ST7789(object):
             self._spi.xfer(data[start:end])
 
     def set_backlight(self, value):
-        """Set the backlight on/off."""
+        """Set the backlight on/off. PWM 0.0-1.0, otherwise 1 or 0."""
         if self._backlight is not None:
             if self._backlight_pwm:
                 self._backlight_pwm.change_duty_cycle(value * 100)
+                self._brightness = value
             else:
                 GPIO.output(self._backlight, value)
+                self._brightness = value
+
+    def get_backlight(self):
+        """Get the current backlight value."""
+        if self._backlight is not None:
+            return self._brightness
 
     @property
     def width(self):
