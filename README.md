@@ -1,4 +1,4 @@
-# Pwnagotchi
+# Pwnagotchi with embeded Fancygotchi
 
 <p align="center">
     <a href="https://github.com/evilsocket/pwnagotchi/releases/latest"><img alt="Release" src="https://img.shields.io/github/release/evilsocket/pwnagotchi.svg?style=flat-square"></a>
