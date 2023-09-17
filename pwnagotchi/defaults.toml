@@ -239,3 +239,5 @@ fs.memory.mounts.data.size = "10M"
 fs.memory.mounts.data.sync = 3600
 fs.memory.mounts.data.zram = false
 fs.memory.mounts.data.rsync = true
+
+main.log.debug = false
