@@ -18,6 +18,10 @@ main.whitelist = [
 ]
 main.filter = ""
 
+fancygotchi.theme = ""
+fancygotchi.rotation = 0
+
+
 main.plugins.grid.enabled = true
 main.plugins.grid.report = false
 main.plugins.grid.exclude = [
@@ -125,6 +129,7 @@ main.plugins.session-stats.save_directory = "/var/tmp/pwnagotchi/sessions/"
 main.log.path = "/var/log/pwnagotchi.log"
 main.log.rotation.enabled = true
 main.log.rotation.size = "10M"
+main.log.debug = false
 
 ai.enabled = true
 ai.path = "/root/brain.nn"
@@ -239,5 +244,3 @@ fs.memory.mounts.data.size = "10M"
 fs.memory.mounts.data.sync = 3600
 fs.memory.mounts.data.zram = false
 fs.memory.mounts.data.rsync = true
-
-main.log.debug = false

@@ -6,6 +6,8 @@ import secrets
 import json
 from functools import wraps
 
+from PIL import Image
+
 # https://stackoverflow.com/questions/14888799/disable-console-messages-in-flask-server
 logging.getLogger('werkzeug').setLevel(logging.ERROR)
 os.environ['WERKZEUG_RUN_MAIN'] = 'true'
@@ -23,6 +25,11 @@ from flask import abort
 from flask import redirect
 from flask import render_template, render_template_string
 
+# add on for fancygotchi
+#from pwnagotchi.ui.view import width
+from pwnagotchi.ui.view import View
+
+
 
 class Handler:
     def __init__(self, config, agent, app):
@@ -36,6 +43,13 @@ class Handler:
         self._app.add_url_rule('/shutdown', 'shutdown', self.with_auth(self.shutdown), methods=['POST'])
         self._app.add_url_rule('/reboot', 'reboot', self.with_auth(self.reboot), methods=['POST'])
         self._app.add_url_rule('/restart', 'restart', self.with_auth(self.restart), methods=['POST'])
+
+        # fancygotchi
+        fancy_with_auth = self.with_auth(self.fancygotchi)
+        self._app.add_url_rule('/fancygotchi', 'fancygotchi', fancy_with_auth, strict_slashes=False,
+                               defaults={'subpath': None})
+        #self._app.add_url_rule('/plugins/<path:subpath>', 'fancygotchi', fancy_with_auth, methods=['GET', 'POST'])
+        self._app.add_url_rule('/fancygotchi/<subpath>', 'fancygotchi', fancy_with_auth, strict_slashes=False, methods=['GET', 'POST'])
 
         # inbox
         self._app.add_url_rule('/inbox', 'inbox', self.with_auth(self.inbox))
@@ -75,6 +89,33 @@ class Handler:
                                title=pwnagotchi.name(),
                                other_mode='AUTO' if self._agent.mode == 'manual' else 'MANU',
                                fingerprint=self._agent.fingerprint())
+
+    def fancygotchi(self, subpath):
+        dump = {}
+        #view = View()
+        if subpath is None:
+            return render_template('fancygotchi.html', title='Fancygotchi')
+        x = self._agent._view._width#View._width#View.width()
+        y = self._agent._view._height#View._height#View.height()
+        if subpath == 'getinfo' and request.method == 'GET':
+            logging.warning('Fancygotchi web UI GET getinfo')
+            dump = {
+                'is_display': pwnagotchi.config['ui']['display']['enabled'],
+                'display': pwnagotchi.config['ui']['display']['type'],
+                'resolution': [x, y],
+                'theme': 'test',#self.config['main']['plugins']['fancygotchi']['theme'],
+                'bg_image': pwnagotchi._theme['theme']['options']['bg_image']
+            }
+
+        if dump != {}:
+            try:
+                logging.warning('GET getinfo returned')
+                return json.dumps(dump, indent=4)#default=serializer)
+                #return plugins.loaded[name].on_webhook(subpath, request)
+            except Exception:
+                abort(500)
+        else:
+            abort(404)
 
     def inbox(self):
         page = request.args.get("p", default=1, type=int)

@@ -1,4 +1,5 @@
 from threading import Lock
+import logging
 
 
 class State(object):
@@ -31,6 +32,13 @@ class State(object):
         with self._lock:
             return self._state[key].value if key in self._state else None
 
+    def get_attr(self, key, attribute='value'):
+        with self._lock:
+            if key in self._state:
+                return getattr(self._state[key], attribute)
+            else:
+                return None
+
     def reset(self):
         with self._lock:
             self._changes = {}
@@ -52,6 +60,34 @@ class State(object):
             if key in self._state:
                 prev = self._state[key].value
                 self._state[key].value = value
+
+                if prev != value:
+                    self._changes[key] = True
+                    if key in self._listeners and self._listeners[key] is not None:
+                        self._listeners[key](prev, value)
+
+    def set_font(self, key, value):
+        with self._lock:
+            if key in self._state:
+                self._state[key].font = value
+
+    def set_textfont(self, key, value):
+        with self._lock:
+            if key in self._state:
+                self._state[key].text_font = value
+
+    def set_labelfont(self, key, value):
+        with self._lock:
+            if key in self._state:
+                self._state[key].label_font = value
+
+    def set_attr(self, key, attribute, value):
+        #logging.warning('%s %s %s' % (key, attribute, value))
+        with self._lock:
+            if key in self._state:
+                #logging.warning(self._state[key])
+                prev = getattr(self._state[key], attribute)
+                setattr(self._state[key], attribute, value)
 
                 if prev != value:
                     self._changes[key] = True
