@@ -432,8 +432,9 @@ class View(object):
 
                 #pwnagotchi.fancy_change = True
                 if pwnagotchi._fancy_change == True:
-                    logging.warning(self)
+                    #logging.warning(self)
                     self._fancygotchi.fancy_change()
+                    #self._fancygotchi.fancy_change()
                     #if self._boot == 0:
                     pwnagotchi._fancy_change = False
                     #else:

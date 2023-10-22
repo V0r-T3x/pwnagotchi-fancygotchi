@@ -94,6 +94,8 @@ class Handler:
         dump = {}
         #view = View()
         if subpath is None:
+            logging.warning('activation of fancy_change')
+            pwnagotchi._fancy_change = True
             return render_template('fancygotchi.html', title='Fancygotchi')
         x = self._agent._view._width#View._width#View.width()
         y = self._agent._view._height#View._height#View.height()
@@ -109,7 +111,7 @@ class Handler:
 
         if dump != {}:
             try:
-                logging.warning('GET getinfo returned')
+                logging.warning('GET getinfo returned\n\n\n')
                 return json.dumps(dump, indent=4)#default=serializer)
                 #return plugins.loaded[name].on_webhook(subpath, request)
             except Exception:
