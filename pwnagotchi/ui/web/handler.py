@@ -105,7 +105,7 @@ class Handler:
                 'is_display': pwnagotchi.config['ui']['display']['enabled'],
                 'display': pwnagotchi.config['ui']['display']['type'],
                 'resolution': [x, y],
-                'theme': 'test',#self.config['main']['plugins']['fancygotchi']['theme'],
+                'theme': pwnagotchi.config['fancygotchi']['theme'],
                 'bg_image': pwnagotchi._theme['theme']['options']['bg_image']
             }
 
