@@ -28,5 +28,6 @@ class EPD(object):
         pass
 
     def display(self, image):
-        rgb_im = ImageOps.colorize(image.convert("L"), black ="green", white ="black")
-        self.LCD.LCD_ShowImage(rgb_im, 0, 0)
+        #rgb_im = ImageOps.colorize(image.convert("L"), black ="green", white ="black")
+        #self.LCD.LCD_ShowImage(rgb_im, 0, 0)
+        self.LCD.LCD_ShowImage(image, 0, 0)

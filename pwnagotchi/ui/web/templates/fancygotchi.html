@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base.html" %}plugins_with_auth
 {% set active_page = "fancygotchi" %}
 {% block title %}
 {{ name }}
@@ -27,17 +27,29 @@
     #content{
         position:relative;
     }
+    #filter_color{
+        top:50px;
+        margin-left:50px;
+        //background-color: rgba(0, 255, 0, 0.5);
+        position:absolute;
+        //width:100%;
+        //height:100%;
+        z-index:100;
+        border:1px solid black;
+    }
     #upd{
         margin: 0;
         top: -7px;
     }
     #divTop{
         //height:50px;
+        border-bottom: 1px solid black;
         //margin: -10px;
         //padding: -10px;
     }
     #divDevTop{
         //height:50px;
+        border-bottom: 1px solid black;
         //margin: -10px;
         //padding: -10px;
     }
@@ -49,8 +61,13 @@
         justify-content: center;
         //width:50%;
         flex-grow: 1;
+        border: 1px solid black;
     }
     #cmd_tabs{
+        //height:50px;
+        border-bottom: 1px solid black;
+        //margin: -10px;
+        //padding: -10px;
     }
     #wrap_img{
         text-align: center;
@@ -64,12 +81,14 @@
     #editor{
         display: flex;
         width: 100%;
+        //border:1px solid red;
         margin-right: 0;
     }
     #btnDevBackup{
         top: 9px;
     }
     #tableoptions{
+        border-bottom: 1px solid black;
     }
 </style>
 {% endblock %}
@@ -497,7 +516,7 @@
         }
 
         // Call to generate the page
-        loadJSON("fancygotchi/get-info", function(response) {
+        loadJSON("/fancygotchi/getinfo", function(response) {
             var flat_json = flattenJson(response);
             var table = jsonToTable(flat_json, false);
             var theme_array = jsonToArray(flat_json);
