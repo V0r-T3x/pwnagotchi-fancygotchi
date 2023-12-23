@@ -72,9 +72,6 @@ class KeyPair(object):
                 try:
                     os.remove(self.priv_path)
                     os.remove(self.pub_path)
-                    #if os.path.exists(f'{self.priv_path}.original') and os.path.exists(f'{self.pub_path}.original') and os.path.exists(f'{self.fingerprint_path}.original'):
-                    #    shutil.copy(f'{self.priv_path}.original', self.priv_path)
-                    #    shutil.copy(f'{self.pub_path}.original', self.pub_path)
                 except:
                     pass
 
