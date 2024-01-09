@@ -190,6 +190,7 @@ class fancygotchi(object):
             if th_opt['bg_anim_image'] != '' and os.path.exists(bga_path):
                 #logging.warning('%simg/%s' % (pwnagotchi._fancy_theme, th_opt['bg_anim_image']))
                 gif = Image.open(bga_path)
+                self._i = 0
                 self._frames = []
                 for frame in ImageSequence.Iterator(gif):
                     self._frames.append(frame.convert("RGBA"))
