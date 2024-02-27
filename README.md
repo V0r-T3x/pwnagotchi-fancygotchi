@@ -314,6 +314,7 @@ You can fork this repo, copy your new theme and push a commit to the main. I'll 
 ---------|-------
 Website | [pwnagotchi.ai](https://pwnagotchi.ai/)
 Discord | [Unofficial pwnagotchi](https://discord.gg/PgaU3Vp)
+Discord | [Bananagotchi](https://discord.gg/tJusHNkPVs)
 Subreddit | [r/pwnagotchi](https://www.reddit.com/r/pwnagotchi/)
 Subreddit | [r/bananagotchi](https://www.reddit.com/r/bananagotchigotchi/)
 Twitter | [@V0rT3x](https://twitter.com/V0rt3_x)  
