@@ -1,6 +1,6 @@
 # Pwnagotchi with embeded Fancygotchi
 
-# If you want to only install Fancygotchi, use [Fancytools](https://github.com/V0r-T3x/Fancytools).
+# If you only want to install Fancygotchi, use [Fancytools](https://github.com/V0r-T3x/Fancytools).
 
 [Pwnagotchi wiki](https://github.com/V0r-T3x/pwnagotchi-fancygotchi/wiki)
 <p align="center">
