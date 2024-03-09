@@ -67,9 +67,9 @@ They stand for the Horizontal and Vertical configuration files. Inside it you ha
 
 1- Copy the default folder.  
 2- Rename it with the name of your choice, ex. yourtheme:  
-`.../fancygotchi/themes/yourtheme`  
+`.../custom_plugins/themes/yourtheme`  
 3- Inside this folder, you need a folder named with your display type (look into the config.toml file at `ui.display.type`). If the folder don't exist, just copy another one and rename it with the display type:   
-`.../fancygotchi/themes/yourtheme/resolution/config-h.tom`  
+`.../custom_plugins/themes/yourtheme/resolution/config-h.tom`  
 4- Change your /etc/pwngotchi/config.toml file with your custom name:   
 ```
 fancygotchi.theme = 'yourtheme'
