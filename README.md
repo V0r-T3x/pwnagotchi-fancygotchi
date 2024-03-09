@@ -43,6 +43,10 @@ Waveshare v2 150x122 1bit color with full color web UI
 This mod can be a bit slow with some features enabled on a raspberry pi zero.
 (I'll add a note about the best light config to your with a rpi0w soon)  
 
+### To install a theme:  
+----
+- Download the [Fancygotchi Theme](https://github.com/V0r-T3x/fancygotchi_themes) you want. Create the theme folder inside the custom plugins folder and place your theme folder inside it. (default themes folder path: `/usr/local/share/pwnagotchi/custom-plugins/themes/`)
+
 ### To create a theme (* Update to come*):  
 ----  
 You can create your own theme easily with fancygothci. You just have to copy the right resolution folders from the theme folder inside the fancygotchi theme folder.  
@@ -59,11 +63,11 @@ Here a list of display resoltion types:
 
 Inside the resolution folder, you will have two file config-h.toml and config-v.toml.  
 
-They stand for the Horizon and vertical configuration files. Inside it you have all the possible options. Each position, color, if it can icon or not.. etc etc etc  
+They stand for the Horizontal and Vertical configuration files. Inside it you have all the possible options. Each position, color, if it can icon or not.. etc etc etc  
 
 1- Copy the default folder.  
 2- Rename it with the name of your choice, ex. yourtheme:  
-`.../fancygotchi/themes/yourtheme` 
+`.../fancygotchi/themes/yourtheme`  
 3- Inside this folder, you need a folder named with your display type (look into the config.toml file at `ui.display.type`). If the folder don't exist, just copy another one and rename it with the display type:   
 `.../fancygotchi/themes/yourtheme/resolution/config-h.tom`  
 4- Change your /etc/pwngotchi/config.toml file with your custom name:   
